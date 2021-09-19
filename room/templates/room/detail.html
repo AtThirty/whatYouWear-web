@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+    <title>detail</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="list-group">
+            <a href="" class="list-group-item list-group-item-action">{{ user.number }}/{{ user.username }}/{{ user.top }}/{{ user.bot }}</a>
+        </div>
+        <div class="input-group input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-lg">Large</span>
+            </div>
+            <input type="text" class="form-control" aria-label="Sizing example input" id="name"
+                aria-describedby="inputGroup-sizing-lg" value="{{ user.username }}">
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="colorPicker"></div>
+                <div class="d-none" id="color1"></div>
+            </div>
+            <div class="col">
+                <div class="colorPicker2"></div>
+                <div class="d-none" id="color2"></div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-info" onclick="save_it()">Save</button>
+        <button type="button" class="btn btn-info" onclick="delete_it()">Delete</button>
+        <button type="button" class="btn btn-info" onclick="before_page()">돌아가기</button>
+    </div>
+
+    <script>
+        function before_page(){
+            window.location.replace("../");
+        }
+    </script>
+    <script>
+        var colorPicker = new iro.ColorPicker(".colorPicker", {
+            width: 280,
+            color: "{{ user.top }}",
+            borderWidth: 1,
+            borderColor: "#fff",
+        });
+        colorPicker.on(["color:init", "color:change"], function (color) {
+            document.getElementById("color1").innerText = color.hexString;
+        });
+
+        var colorPicker2 = new iro.ColorPicker(".colorPicker2", {
+            width: 280,
+            color: "{{ user.bot }}",
+            borderWidth: 1,
+            borderColor: "#fff",
+        });
+        colorPicker2.on(["color:init", "color:change"], function (color) {
+            document.getElementById("color2").innerText = color.hexString;
+        });
+    </script>
+    <script>
+        function save_it(){
+            var room = "{{ room_name }}";
+            var number = "{{ user.number }}";
+            var name = document.getElementById("name").value;
+            var color1 = document.getElementById("color1").innerText;
+            var color2 = document.getElementById("color2").innerText;
+            var uri = window.location.host+"/room/"+room;
+            fetch("http://127.0.0.1:8000/api/"+room+"/"+number+"/", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name: name,
+                color1: color1,
+                color2: color2,
+            }),
+        }).then(window.location.replace("../"));
+        }
+    </script>
+    <script>
+        function delete_it(){
+            var room = "{{ room_name }}";
+            var number = "{{ user.number }}";
+            fetch("http://127.0.0.1:8000/api/"+room+"/"+number+"/", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+            }),
+        }).then(window.location.replace("../"));
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

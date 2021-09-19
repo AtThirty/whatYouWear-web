@@ -40,7 +40,16 @@
     function room_submit(){
         let id = (Math.random() + 1).toString(36).substring(2);
         var number = document.getElementById("people").value;
-        window.location.replace(id);
+        fetch("http://127.0.0.1:8000/api/make_room/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                room: id,
+                number: number,
+            }),
+        }).then(window.location.replace("room/"+id));
     }
 </script>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
