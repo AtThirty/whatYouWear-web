@@ -13,7 +13,47 @@
             {% endfor %}
             <button type="button" class="btn btn-info" onclick="add_it()">Add</button>
         </div>
+        <a id="kakao-link-btn" href="javascript:kakaoShare()">
+            <img src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png" />
+        </a>
     </div>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script type="text/javascript">
+        Kakao.init('c47e38b7dbe9b111e5e714bf02191690');
+      
+        console.log(Kakao.isInitialized());
+      
+        function kakaoShare() {
+          var room = "{{ room_name }}";
+          Kakao.Link.sendDefault({
+            objectType: 'feed',
+            content: {
+              title: 'What you wear~',
+              description: '오우예',
+              imageUrl: 'http://mud-kage.kakao.co.kr/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg',
+              link: {
+                mobileWebUrl: 'http://127.0.0.1:8000/room/'+room+'/',
+                webUrl: 'http://127.0.0.1:8000/room/'+room+'/',
+              },
+            },
+            buttons: [
+              {
+                title: '웹으로 보기',
+                link: {
+                  webUrl: 'http://127.0.0.1:8000/room/'+room+'/',
+                },
+              },
+              {
+                title: '앱으로 보기',
+                link: {
+                    mobileWebUrl: "http://127.0.0.1:8000/room/"+room+"/",
+                }
+              }
+            ],
+            installTalk: true,
+          })
+        }
+      </script>
     <script>
         function add_it(){
             var room = "{{ room_name }}";
